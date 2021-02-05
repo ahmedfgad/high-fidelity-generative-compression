@@ -65,7 +65,7 @@ python3 train.py --model_type compression --regime low --n_steps 1e6
 
 ```bash
 # Train using full generator-discriminator loss
-python3 train.py --model_type compression_gan --regime low --n_steps 1e6 --warmstart --ckpt path/to/base/checkpoint
+python3 train.py --model_type compression_gan --regime low --n_steps 1e6 --warmstart -ckpt path/to/base/checkpoint
 ```
 
 ### Compression
@@ -128,11 +128,11 @@ A | B
 <details>
 
   <summary>Image 3</summary>
-  
+
   ```python
   Original: A (12.3 bpp) | HIFIC: B (0.209 bpp). Ratio: 58.9
   ```
-  
+
 </details>
 
 A             |  B
@@ -142,11 +142,11 @@ A             |  B
 <details>
 
   <summary>Image 4</summary>
-  
+
   ```python
   Original: B (19.9 bpp) | HIFIC: A (0.565 bpp). Ratio: 35.2
   ```
-  
+
 </details>
 
 The last two show interesting failure modes: small figures in the distance are almost entirely removed (top of the central rock in the penultimate image), and the required model bitrate increases significantly when the image is dominated by high-frequency components.
