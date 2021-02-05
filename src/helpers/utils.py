@@ -172,7 +172,12 @@ def load_model(save_path, logger, device, model_type=None, model_mode=None, curr
 
     start_time = time.time()
     from src.model import Model
-    checkpoint = torch.load(save_path, map_location=torch.device('cpu'))
+    dev = ""
+    if torch.cuda.is_available():
+        dev = "cuda"
+    else: 
+        dev = "cpu"
+    checkpoint = torch.load(save_path, map_location=torch.device(dev))
     loaded_args_d = checkpoint['args']
 
     args = Struct(**loaded_args_d)
