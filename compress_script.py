@@ -210,32 +210,36 @@ def compress_and_decompress(args):
     logger.info('Time elapsed: {:.3f} s'.format(delta_t))
     logger.info('Rate: {:.3f} Images / s:'.format(float(N) / delta_t))
 
-sys.argv = ['compress.py', 
-            '-i', 'test', 
-            '-ckpt', 'Models/hific_low.pt', 
-            '--metrics']
+def main(**kwargs):
+    sys.argv = ['compress_script.py', 
+                '-i', 'test', 
+                '-ckpt', 'Models\\hific_low.pt', 
+                '--metrics']
 
-description = "Compresses batch of images using learned model specified via -ckpt argument."
-parser = argparse.ArgumentParser(description=description,
-                                 formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument("-ckpt", "--ckpt_path", type=str, required=True, help="Path to model to be restored")
-parser.add_argument("-i", "--image_dir", type=str, default='data/originals',
-                    help="Path to directory containing images to compress")
-parser.add_argument("-o", "--output_dir", type=str, default='data/reconstructions', 
-                    help="Path to directory to store output images")
-parser.add_argument('-bs', '--batch_size', type=int, default=1,
-                    help="Loader batch size. Set to 1 if images in directory are different sizes.")
-parser.add_argument("-rc", "--reconstruct", help="Reconstruct input image without compression.", action="store_true")
-parser.add_argument("-save", "--save", help="Save compressed format to disk.", action="store_true")
-parser.add_argument("-metrics", "--metrics", help="Evaluate compression metrics.", action="store_true")
-args = parser.parse_args()
+    description = "Compresses batch of images using learned model specified via -ckpt argument."
+    parser = argparse.ArgumentParser(description=description,
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument("-ckpt", "--ckpt_path", type=str, required=True, help="Path to model to be restored")
+    parser.add_argument("-i", "--image_dir", type=str, default='data/originals',
+        help="Path to directory containing images to compress")
+    parser.add_argument("-o", "--output_dir", type=str, default='data/reconstructions', 
+        help="Path to directory to store output images")
+    parser.add_argument('-bs', '--batch_size', type=int, default=1,
+        help="Loader batch size. Set to 1 if images in directory are different sizes.")
+    parser.add_argument("-rc", "--reconstruct", help="Reconstruct input image without compression.", action="store_true")
+    parser.add_argument("-save", "--save", help="Save compressed format to disk.", action="store_true")
+    parser.add_argument("-metrics", "--metrics", help="Evaluate compression metrics.", action="store_true")
+    args = parser.parse_args()
 
-input_images = glob.glob(os.path.join(args.image_dir, '*.jpg'))
-input_images += glob.glob(os.path.join(args.image_dir, '*.png'))
+    input_images = glob.glob(os.path.join(args.image_dir, '*.jpg'))
+    input_images += glob.glob(os.path.join(args.image_dir, '*.png'))
 
-assert len(input_images) > 0, 'No valid image files found in supplied directory!'
+    assert len(input_images) > 0, 'No valid image files found in supplied directory!'
 
-print('Input images')
-pprint(input_images)
+    print('Input images')
+    pprint(input_images)
 
-compress_and_decompress(args)
+    compress_and_decompress(args)
+
+if __name__ == '__main__':
+    main()
