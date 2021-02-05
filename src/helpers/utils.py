@@ -251,10 +251,12 @@ def load_model(save_path, logger, device, model_type=None, model_mode=None, curr
             discriminator_parameters = model.Discriminator.parameters()
             disc_opt = torch.optim.Adam(discriminator_parameters, lr=args.learning_rate)
             optimizers['disc'] = disc_opt
-            
+
         if args.sample_noise is True:
             optimizers['amort'].add_param_group({'params': list(model.Generator.latent_noise_map.parameters())})
-        
+
+        # Check this issue: https://github.com/Justin-Tan/high-fidelity-generative-compression/issues/20
+        checkpoint['compression_optimizer_state_dict']["param_groups"][0]['params'] = optimizers['amort'].state_dict()["param_groups"][0]['params']
         optimizers['amort'].load_state_dict(checkpoint['compression_optimizer_state_dict'])
         optimizers['hyper'].load_state_dict(checkpoint['hyperprior_optimizer_state_dict'])
         if (model.use_discriminator is True) and ('disc' in optimizers.keys()):
